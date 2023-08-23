@@ -13,7 +13,7 @@ async def producer(queue):
         await asyncio.sleep(value)
         # add to queue
         await queue.put(value)
-    print(f'{time.ctime()} Producer: Done')
+    print(f'{time.ctime()} Producer d: Done')
 
 # coroutine to consume work
 async def consumer(queue):
