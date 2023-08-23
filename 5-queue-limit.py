@@ -3,21 +3,23 @@ import asyncio
 import time
 
 # Coroutine to generate work
-async def producer(queue):
-    print(f'{time.ctime()} Producer: Running')
+async def producer(queue, id):
+    print(f'{time.ctime()} Producer {id}: Running')
+
     # generate work
     for i in range(10):
         # generate a value
         value = random()
         # block to simulate work
-        await asyncio.sleep(value)
+        await asyncio.sleep((id+1)/10)
         # add to queue
         await queue.put(value)
-    print(f'{time.ctime()} Producer: Done')
+    print(f'{time.ctime()} Producer {id}: Done')
 
 # coroutine to consume work
 async def consumer(queue):
     print(f'{time.ctime()} Consumer: Running')
+
     # consume work
     while True:
         # get a unit of work
@@ -39,7 +41,7 @@ async def main():
     # start the consumer
     _ = asyncio.create_task(consumer(queue))
     # create many producers
-    producers = [producer(queue) for _ in range(5)]
+    producers = [producer(queue,id_2) for id_2 in range(5)]
     # run and wait for the producers to finish
     await asyncio.gather(*producers)
     # wait for all item to be processed
@@ -47,7 +49,6 @@ async def main():
 
 #start the asyncio program
 asyncio.run(main())
-
 
 ##  Reslut
 # PS E:\00Lab\IOT\asyncio_exercise> & C:/Users/karnt/AppData/Local/Programs/Python/Python310/python.exe e:/00Lab/IOT/asyncio_exercise/class8-asyncio/5-queue-limit.py
